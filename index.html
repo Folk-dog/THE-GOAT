@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>THE GOAT - Gao Pirapat</title>
+  <style>
+    :root {
+      --bg: #111827;
+      --card: #1f2937;
+      --card-highlight: #374151;
+      --text: #f9fafb;
+      --muted: #9ca3af;
+      --accent: #6366f1;
+      --gold: #f59e0b;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, Tahoma, sans-serif;
+      padding: 32px 20px;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1050px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    /* Header Section */
+    header {
+      text-align: center;
+      margin-bottom: 8px;
+    }
+
+    .title-goat {
+      font-size: 2.2rem;
+      font-weight: 900;
+      letter-spacing: 2px;
+      background: linear-gradient(135deg, #fbbf24, #f59e0b);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 4px;
+    }
+
+    .title-name {
+      font-size: 1.4rem;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    /* Info Badge / Boxp */
+    .boxp {
+      background: var(--card-highlight);
+      color: var(--text);
+      border-radius: 12px;
+      padding: 10px 16px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: 600;
+      font-size: 0.95rem;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      letter-spacing: 0.5px;
+    }
+
+    /* Grid layout: Left (Text) & Right (Gallery) */
+    .main-content {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+
+    /* จอใหญ่: ข้อความซ้าย รูปภาพขวา */
+    @media (min-width: 768px) {
+      .main-content {
+        grid-template-columns: 1.2fr 0.8fr;
+      }
+    }
+
+    /* Main Content Box (Left Side) */
+    .box {
+      background-color: var(--card);
+      color: var(--text);
+      border-radius: 16px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .box p {
+      white-space: pre-line;
+      color: #e5e7eb;
+      font-size: 0.98rem;
+    }
+
+    .box p:first-child {
+      font-weight: 600;
+      color: var(--gold);
+      border-bottom: 1px dashed rgba(255, 255, 255, 0.15);
+      padding-bottom: 12px;
+    }
+
+    /* Gallery Section (Right Side) */
+    .gallery {
+      width: 100%;
+    }
+
+    .gallery h2 {
+      font-size: 1.25rem;
+      margin-bottom: 14px;
+      text-align: center;
+      color: var(--text);
+    }
+
+    .viewer {
+      position: relative;
+      background: #000;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+    }
+
+    .track {
+      display: flex;
+      transition: transform 0.45s cubic-bezier(0.25, 1, 0.5, 1);
+      touch-action: pan-y;
+    }
+
+    .slide {
+      min-width: 100%;
+      aspect-ratio: 3 / 4;
+      max-height: 70vh;
+      position: relative;
+      background: #000;
+    }
+
+    .slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+      user-select: none;
+      -webkit-user-drag: none;
+    }
+
+    .caption {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      padding: 32px 16px 14px;
+      color: #fff;
+      background: linear-gradient(transparent, rgba(0, 0, 0, 0.85));
+      font-size: 0.9rem;
+      text-align: center;
+    }
+
+    .nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 42px;
+      height: 42px;
+      border: none;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.5);
+      color: #fff;
+      font-size: 1.2rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(4px);
+      transition: background 0.2s, transform 0.2s;
+    }
+
+    .nav:hover {
+      background: rgba(0, 0, 0, 0.8);
+      transform: translateY(-50%) scale(1.05);
+    }
+
+    .prev { left: 12px; }
+    .next { right: 12px; }
+
+    .counter {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: rgba(0, 0, 0, 0.6);
+      color: #fff;
+      font-size: 0.75rem;
+      padding: 4px 10px;
+      border-radius: 999px;
+      backdrop-filter: blur(4px);
+    }
+
+    .hint {
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.8rem;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <h1 class="title-goat">THE GOAT🐐</h1>
+      <h1 class="title-name">Gao เก้า</h1>
+    </header>
+
+    <div class="boxp">
+      My first name Pirapat
+    </div>
+
+    <!-- ส่วนเนื้อหาหลักแบ่งเป็น 2 ฝั่ง (ซ้าย: ข้อความ, ขวา: แกลเลอรี) -->
+    <div class="main-content">
+      
+      <!-- ฝั่งซ้าย: ข้อความ -->
+      <div class="box">
+        <p>สวัสดีครับเนินทราย ผมชื่อเก้า อายุ 14 ปี ครับ คอยช่วยเป็นกำลังใจให้ผมด้วยนะครับ ฝากเนื้อฝากตัวด้วยนะครับ</p>
+        
+        <p>สวัสดีครับโค้ช พี่ๆ และเพื่อนๆ ทุกคนครับ ผมชื่อ เก้า ครับ อายุ 14 ปี
+
+ตำแหน่งที่ผมถนัดและเล่นเป็นหลักคือ ปีกซ้าย (LW) ครับ สไตล์การเล่นของผมจะเน้นความเร็ว การลากเลื้อยตัดเข้าในเพื่อหาโอกาสยิงประตูด้วยขวา หรือการเลี้ยงเจาะไปสุดเส้นหลังเพื่อครอสบอลเข้ากลางให้เพื่อนร่วมทีมครับ
+
+สิ่งที่ผมให้ความสำคัญมากๆ สำหรับตำแหน่งนี้ไม่ใช่แค่งานรุกครับ แต่คือเรื่องของสปีด ความฟิต และวินัยในการช่วยเกมรับด้วย ผมพร้อมจะวิ่งสู้ฟัด วิ่งไล่บอลช่วยแบ็กซ้ายเมื่อทีมเสียบอลแน่นอนครับ
+
+เหตุผลที่ผมอยากมาสมัครเข้าทีมนี้ เพราะผมเห็นถึงความตื่นตัวและระบบการเล่นที่ดีของทีม ผมเชื่อว่าการได้มาซ้อมและลงเล่นกับทุกคนจะช่วยพัฒนาศักยภาพของผมให้เก่งขึ้นกว่าเดิมได้ ผมพร้อมที่จะรับฟังคำแนะนำจากโค้ช พร้อมปรับตัวเข้ากับระบบทีม และจะตั้งใจฝึกซ้อมอย่างเต็ม 100% ทุกครั้งครับ
+
+ฝากเนื้อฝากตัวกับโค้ชและพี่ๆ ทุกคนด้วยนะครับ ขอบคุณครับ เคยเล่นคู่เมสซี่ โรนัลโด้ เนย์มาร์ ปัจจุบันเล่นให้กับ ปันนวิชญ์ ยูไนเต็ด</p>
+      </div>
+
+      <!-- ฝั่งขวา: แกลเลอรีรูปภาพ -->
+      <div class="gallery">
+        <div class="viewer" id="viewer">
+          <div class="track" id="track"></div>
+          <button class="nav prev" id="prev" aria-label="ก่อนหน้า">&#10094;</button>
+          <button class="nav next" id="next" aria-label="ถัดไป">&#10095;</button>
+          <div class="counter" id="counter"></div>
+        </div>
+        <div class="hint"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // ===== ใส่รูปของคุณตรงนี้ =====
+    var images = [
+      {src: 'img/img1.jpeg', caption: 'คำอธิบายรูปที่ 1'},
+      {src: 'img/img2.jpeg', caption: 'คำอธิบายรูปที่ 2'},
+      {src: 'img/img3.jpg', caption: 'คำอธิบายรูปที่ 3'},
+      {src: 'img/img4.jpeg', caption: 'คำอธิบายรูปที่ 4'},
+      {src: 'img/img5.jpeg', caption: 'คำอธิบายรูปที่ 5'}
+    ];
+    // =============================
+
+    var track = document.getElementById('track');
+    var counter = document.getElementById('counter');
+    var index = 0;
+
+    images.forEach(function(item) {
+      var s = document.createElement('div');
+      s.className = 'slide';
+      s.innerHTML = '<img src="' + item.src + '" alt="' + item.caption + '" draggable="false"><div class="caption">' + item.caption + '</div>';
+      track.appendChild(s);
+    });
+
+    function go(i) {
+      index = (i + images.length) % images.length;
+      track.style.transform = 'translateX(-' + (index * 100) + '%)';
+      counter.textContent = (index + 1) + ' / ' + images.length;
+    }
+
+    document.getElementById('prev').onclick = function() { go(index - 1); };
+    document.getElementById('next').onclick = function() { go(index + 1); };
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'ArrowLeft') go(index - 1);
+      if (e.key === 'ArrowRight') go(index + 1);
+    });
+
+    var x0 = null;
+    var viewer = document.getElementById('viewer');
+    viewer.addEventListener('touchstart', function(e) { 
+      x0 = e.touches[0].clientX; 
+    }, {passive: true});
+
+    viewer.addEventListener('touchend', function(e) {
+      if (x0 === null) return;
+      var dx = e.changedTouches[0].clientX - x0;
+      if (Math.abs(dx) > 40) go(index + (dx < 0 ? 1 : -1));
+      x0 = null;
+    });
+
+    go(0);
+  </script>
+</body>
+</html>
